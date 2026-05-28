@@ -1,1 +1,175 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Каталог ухода — AURA</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .catalog-layout {
+            display: flex;
+            gap: 40px;
+            padding: 50px 0;
+        }
+        /* Боковая панель фильтров */
+        .sidebar {
+            width: 250px;
+            flex-shrink: 0;
+        }
+        .filter-section {
+            background-color: #ffffff;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.01);
+            margin-bottom: 25px;
+        }
+        .filter-title {
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #2c2c2c;
+            border-bottom: 1px solid #f0f0f0;
+            padding-bottom: 10px;
+        }
+        .filter-list li {
+            margin-bottom: 12px;
+        }
+        .filter-link {
+            font-size: 14px;
+            color: #6a6a6a;
+            display: block;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .filter-link:hover, .filter-link.active {
+            color: #f3a3a3;
+            padding-left: 5px;
+            font-weight: 500;
+        }
+        /* Основной контент каталога */
+        .catalog-content {
+            flex-grow: 1;
+        }
+        .catalog-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            background-color: #ffffff;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.01);
+        }
+        .catalog-toolbar select {
+            padding: 8px 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            color: #4a4a4a;
+            outline: none;
+            font-family: inherit;
+            cursor: pointer;
+        }
+        .active-category-title {
+            font-size: 22px;
+            font-weight: 300;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
 
+    <header class="header">
+        <div class="container header__container">
+            <a href="index.html" class="logo">AURA</a>
+            
+            <nav class="navigation">
+                <ul class="nav-list">
+                    <li><a href="catalog.html" class="nav-link">Каталог</a></li>
+                    <li><a href="catalog.html?category=toner" class="nav-link">Тоники</a></li>
+                    <li><a href="catalog.html?category=serum" class="nav-link">Сыворотки</a></li>
+                    <li><a href="catalog.html?category=mask" class="nav-link">Маски</a></li>
+                </ul>
+            </nav>
+
+            <div class="header__actions">
+                <div class="search-box">
+                    <input type="text" placeholder="Поиск ухода..." id="search-input">
+                    <button type="button"><i class="fas fa-search"></i></button>
+                </div>
+                <a href="cart.html" class="cart-icon">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span id="cart-count">0</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="catalog-layout">
+            
+            <aside class="sidebar">
+                <div class="filter-section">
+                    <h3 class="filter-title">Категории</h3>
+                    <ul class="filter-list">
+                        <li><span class="filter-link active" data-category="all">Все средства</span></li>
+                        <li><span class="filter-link" data-category="toner">Тоники</span></li>
+                        <li><span class="filter-link" data-category="serum">Сыворотки</span></li>
+                        <li><span class="filter-link" data-category="mask">Маски</span></li>
+                        <li><span class="filter-link" data-category="cleansing">Очищение</span></li>
+                        <li><span class="filter-link" data-category="cream">Кремы</span></li>
+                    </ul>
+                </div>
+            </aside>
+
+            <section class="catalog-content">
+                <div class="catalog-toolbar">
+                    <h2 class="active-category-title" id="page-category-title">Все средства</h2>
+                    <div class="sort-box">
+                        <select id="sort-select">
+                            <option value="default">Сортировка по умолчанию</option>
+                            <option value="price-asc">Сначала дешевле</option>
+                            <option value="price-desc">Сначала дороже</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="products-grid" id="catalog-products-container">
+                    </div>
+            </section>
+
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer__container">
+            <div class="footer__block">
+                <h3 class="footer__logo">AURA</h3>
+                <p>Концептуальный магазин косметики для личного ритуала красоты.</p>
+            </div>
+            <div class="footer__block">
+                <h4>Навигация</h4>
+                <ul>
+                    <li><a href="catalog.html">Все товары</a></li>
+                    <li><a href="cart.html">Корзина</a></li>
+                </ul>
+            </div>
+            <div class="footer__block">
+                <h4>Контакты</h4>
+                <p>Email: hello@aura-skincare.ru</p>
+                <p>Проект разработан для личного тестирования.</p>
+            </div>
+        </div>
+        <div class="footer__bottom">
+            <p>&copy; 2026 AURA Skincare. Все права защищены (Фиктивный интернет-магазин).</p>
+        </div>
+    </footer>
+
+    <script src="products.js"></script>
+    <script src="main.js"></script>
+    <script src="catalog.js"></script>
+</body>
+</html>
