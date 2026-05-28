@@ -1,1 +1,87 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AURA — Эстетика твоего ухода</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
+    <header class="header">
+        <div class="container header__container">
+            <a href="index.html" class="logo">AURA</a>
+            
+            <nav class="navigation">
+                <ul class="nav-list">
+                    <li><a href="catalog.html" class="nav-link">Каталог</a></li>
+                    <li><a href="catalog.html?category=toner" class="nav-link">Тоники</a></li>
+                    <li><a href="catalog.html?category=serum" class="nav-link">Сыворотки</a></li>
+                    <li><a href="catalog.html?category=mask" class="nav-link">Маски</a></li>
+                </ul>
+            </nav>
+
+            <div class="header__actions">
+                <div class="search-box">
+                    <input type="text" placeholder="Поиск ухода..." id="search-input">
+                    <button type="button"><i class="fas fa-search"></i></button>
+                </div>
+                <a href="cart.html" class="cart-icon">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span id="cart-count">0</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero__content">
+            <h1 class="hero__title">Истинная аура твоей кожи</h1>
+            <p class="hero__subtitle">Минималистичный уход, вдохновленный самой природой. Подарите себе моменты осознанной заботы.</p>
+            <a href="catalog.html" class="btn">Перейти в каталог</a>
+        </div>
+    </section>
+
+    <section class="products-section container">
+        <h2 class="section-title">Новинки ухода</h2>
+        <div class="products-grid" id="new-products-container">
+            </div>
+    </section>
+
+    <section class="products-section container bg-light">
+        <div class="container">
+            <h2 class="section-title">Хиты продаж</h2>
+            <div class="products-grid" id="popular-products-container">
+                </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container footer__container">
+            <div class="footer__block">
+                <h3 class="footer__logo">AURA</h3>
+                <p>Концептуальный магазин косметики для личного ритуала красоты.</p>
+            </div>
+            <div class="footer__block">
+                <h4>Навигация</h4>
+                <ul>
+                    <li><a href="catalog.html">Все товары</a></li>
+                    <li><a href="cart.html">Корзина</a></li>
+                </ul>
+            </div>
+            <div class="footer__block">
+                <h4>Контакты</h4>
+                <p>Email: hello@aura-skincare.ru</p>
+                <p>Проект разработан для личного тестирования.</p>
+            </div>
+        </div>
+        <div class="footer__bottom">
+            <p>&copy; 2026 AURA Skincare. Все права защищены (Фиктивный интернет-магазин).</p>
+        </div>
+    </footer>
+
+    <script src="products.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
