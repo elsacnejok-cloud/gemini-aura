@@ -1,107 +1,168 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // Переменные для отслеживания текущего состояния каталога
-    let currentCategory = "all";
-    let currentSort = "default";
-
-    // Элементы интерфейса
     const container = document.getElementById("catalog-products-container");
-    const pageTitle = document.getElementById("page-category-title");
     const sortSelect = document.getElementById("sort-select");
-    const filterLinks = document.querySelectorAll(".filter-link");
+    const resetButton = document.getElementById("reset-filters");
+    const sidebar = document.getElementById("catalog-sidebar");
+    const catalogTitle = document.getElementById("catalog-title");
 
-    // 1. ИНИЦИАЛИЗАЦИЯ: Проверяем, нет ли категории в URL (например: catalog.html?category=serum)
+    if (!container) return;
+
+    // 1. Считываем параметры из URL (для переходов из шапки, поиска или меню)
     const urlParams = new URLSearchParams(window.location.search);
-    const categoryParam = urlParams.get('category');
-    
-    if (categoryParam && products.some(p => p.category === categoryParam)) {
-        currentCategory = categoryParam;
-        // Подсвечиваем правильный пункт в боковом меню
-        filterLinks.forEach(link => {
-            link.classList.remove("active");
-            if (link.getAttribute("data-category") === currentCategory) {
-                link.classList.add("active");
-            }
-        });
+    const initialCategory = urlParams.get("category");
+    const initialComponent = urlParams.get("component");
+    const initialSkinType = urlParams.get("skinType");
+    const searchQuery = urlParams.get("search");
+
+    // Выставляем галочки на основе параметров URL при первой загрузке
+    if (initialCategory) checkCheckbox("category", initialCategory);
+    if (initialComponent) checkCheckbox("component", initialComponent);
+    if (initialSkinType) checkCheckbox("skinType", initialSkinType);
+
+    if (searchQuery) {
+        catalogTitle.textContent = `Поиск: "${searchQuery}"`;
     }
 
     // Запускаем первичный рендеринг
-    renderCatalog();
+    applyFilters();
 
-    // 2. ОБРАБОТЧИК КЛИКОВ ПО ФИЛЬТРАМ (Боковое меню)
-    filterLinks.forEach(link => {
-        link.addEventListener("click", (e) => {
-            // Убираем активный класс у всех и добавляем текущему
-            filterLinks.forEach(l => l.classList.remove("active"));
-            e.target.classList.add("active");
-
-            // Обновляем текущую категорию и перерисовываем каталог
-            currentCategory = e.target.getAttribute("data-category");
-            renderCatalog();
-        });
+    // 2. ОБРАБОТЧИК ИЗМЕНЕНИЙ В СИСТЕМЕ ФИЛЬТРОВ (Слушаем клики по чекбоксам)
+    sidebar.addEventListener("change", () => {
+        // Очищаем заголовок поиска, если пользователь начал кликать фильтры вручную
+        if (urlParams.has("search")) {
+            window.history.replaceState({}, document.title, "catalog.html");
+            catalogTitle.textContent = "Выбранные средства";
+        }
+        applyFilters();
     });
 
     // 3. ОБРАБОТЧИК СОРТИРОВКИ ПО ЦЕНЕ
-    sortSelect.addEventListener("change", (e) => {
-        currentSort = e.target.value;
-        renderCatalog();
+    sortSelect.addEventListener("change", applyFilters);
+
+    // 4. КНОПКА ПОЛНОГО СБРОСА ГАЛОЧЕК
+    resetButton.addEventListener("click", () => {
+        const checkboxes = sidebar.querySelectorAll("input[type='checkbox']");
+        checkboxes.forEach(cb => cb.checked = false);
+        window.history.replaceState({}, document.title, "catalog.html");
+        catalogTitle.textContent = "Все средства";
+        applyFilters();
     });
 
-    // 4. ГЛАВНАЯ ФУНКЦИЯ ФИЛЬТРАЦИИ И ВЫВОДА ТОВАРОВ
-    function renderCatalog() {
-        if (!container) return;
+    // 5. ГЛАВНАЯ ФУНКЦИЯ МНОЖЕСТВЕННОЙ ФИЛЬТРАЦИИ И СОРТИРОВКИ
+    function applyFilters() {
+        let filtered = [...products];
+
+        // А) Если есть активный поисковый запрос в URL — фильтруем по тексту
+        const currentUrlParams = new URLSearchParams(window.location.search);
+        const activeSearch = currentUrlParams.get("search");
+        
+        if (activeSearch) {
+            const query = activeSearch.toLowerCase();
+            filtered = filtered.filter(p => 
+                p.name.toLowerCase().includes(query) || 
+                p.description.toLowerCase().includes(query) ||
+                p.brand.toLowerCase().includes(query)
+            );
+        }
+
+        // Б) Собираем все отмеченные чекбоксы по группам
+        const activeFilters = {
+            category: getCheckedValues("category"),
+            brand: getCheckedValues("brand"),
+            component: getCheckedValues("component"),
+            skinType: getCheckedValues("skinType")
+        };
+
+        // В) Фильтруем массив по каждой активной группе (Логика "И")
+        if (activeFilters.category.length > 0) {
+            filtered = filtered.filter(p => activeFilters.category.includes(p.category));
+        }
+        if (activeFilters.brand.length > 0) {
+            filtered = filtered.filter(p => activeFilters.brand.includes(p.brand));
+        }
+        if (activeFilters.component.length > 0) {
+            filtered = filtered.filter(p => activeFilters.component.includes(p.component));
+        }
+        if (activeFilters.skinType.length > 0) {
+            filtered = filtered.filter(p => activeFilters.skinType.includes(p.skinType));
+        }
+
+        // Г) Сортировка полученного результата
+        const sortValue = sortSelect.value;
+        if (sortValue === "price-asc") {
+            filtered.sort((a, b) => a.price - b.price);
+        } else if (sortValue === "price-desc") {
+            filtered.sort((a, b) => b.price - a.price);
+        }
+
+        // Д) Вывод карточек на экран
+        renderCatalogGrid(filtered);
+    }
+
+    // Вспомогательная функция сбора значений отмеченных чекбоксов
+    function getCheckedValues(name) {
+        const checked = sidebar.querySelectorAll(`input[name="${name}"]:checked`);
+        return Array.from(checked).map(cb => cb.value);
+    }
+
+    // Вспомогательная функция для проставления галочек из URL параметров
+    function checkCheckbox(name, value) {
+        const cb = sidebar.querySelector(`input[name="${name}"][value="${value}"]`);
+        if (cb) cb.checked = true;
+    }
+
+    // 6. ОТРИСОВКА СЕТКИ ТОВАРОВ С СИНХРОНИЗАЦИЕЙ СЕРДЕЧЕК
+    function renderCatalogGrid(items) {
         container.innerHTML = "";
 
-        // Фильтруем массив по категории
-        let filteredProducts = [...products]; // создаем копию базы данных
-        if (currentCategory !== "all") {
-            filteredProducts = filteredProducts.filter(p => p.category === currentCategory);
-        }
-
-        // Обновляем заголовок страницы
-        if (currentCategory === "all") {
-            pageTitle.textContent = "Все средства";
-        } else if (filteredProducts.length > 0) {
-            pageTitle.textContent = filteredProducts[0].categoryName;
-        }
-
-        // Сортируем отфильтрованные товары
-        if (currentSort === "price-asc") {
-            filteredProducts.sort((a, b) => a.price - b.price); // Сначала дешевле
-        } else if (currentSort === "price-desc") {
-            filteredProducts.sort((a, b) => b.price - a.price); // Сначала дороже
-        }
-
-        // Если товаров в категории нет
-        if (filteredProducts.length === 0) {
-            container.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #a0a0a0; padding: 40px 0;">В этой категории ухода пока нет новинок.</p>`;
+        if (items.length === 0) {
+            container.innerHTML = `
+                <div style="grid-column: 1/-1; text-align: center; padding: 60px 0; color: #999999;">
+                    <i class="fas fa-filter" style="font-size: 32px; margin-bottom: 15px; color: #e5e5e5;"></i>
+                    <p>Средств с такими параметрами не найдено. Попробуйте смягчить фильтры.</p>
+                </div>
+            `;
             return;
         }
 
-        // Генерируем HTML для карточек
-        filteredProducts.forEach(product => {
-            const productHtml = `
+        const wishlist = AuraStorage.getWishlist();
+
+        items.forEach(product => {
+            const isFavorite = wishlist.includes(product.id);
+
+            const cardHtml = `
                 <div class="product-card">
-                    ${product.isNew ? '<span class="product-card__badge">New</span>' : ''}
+                    <div class="product-card__badges">
+                        ${product.isNew ? '<span class="badge-new">New</span>' : ''}
+                    </div>
+                    
+                    <button class="product-card__wishlist-btn ${isFavorite ? 'active' : ''}" 
+                            onclick="toggleWishlist(${product.id}, this)" 
+                            title="${isFavorite ? 'Убрать из избранного' : 'Добавить в избранное'}">
+                        <i class="${isFavorite ? 'fas' : 'far'} fa-heart"></i>
+                    </button>
+
                     <div class="product-card__image">
                         <a href="product.html?id=${product.id}">
                             <img src="${product.image}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/300x300/ffebeb/4a4a4a?text=${encodeURIComponent(product.name)}'">
                         </a>
                     </div>
+                    
                     <div class="product-card__info">
-                        <span class="product-card__category">${product.categoryName}</span>
+                        <span class="product-card__meta">${product.brand} | ${product.categoryName}</span>
                         <a href="product.html?id=${product.id}">
                             <h3 class="product-card__title">${product.name}</h3>
                         </a>
                         <div class="product-card__footer">
                             <span class="product-card__price">${product.price} ₽</span>
-                            <button class="product-card__btn" onclick="addToCart(${product.id})" title="Добавить в корзину">
+                            <button class="product-card__add-btn" onclick="addToCart(${product.id})">
                                 <i class="fas fa-shopping-bag"></i>
                             </button>
                         </div>
                     </div>
                 </div>
             `;
-            container.insertAdjacentHTML("beforeend", productHtml);
+            container.insertAdjacentHTML("beforeend", cardHtml);
         });
     }
 });
