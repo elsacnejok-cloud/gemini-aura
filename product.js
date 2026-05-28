@@ -1,60 +1,81 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const container = document.getElementById("product-page-container");
-    if (!container) return;
+    const zone = document.getElementById("product-view-zone");
+    if (!zone) return;
 
-    // 1. Получаем ID товара из строки запроса URL
+    // Считываем ID средства из адресной строки
     const urlParams = new URLSearchParams(window.location.search);
-    const productId = urlParams.get('id');
+    const productId = urlParams.get("id");
 
-    // 2. Ищем товар в базе данных (функция getProductById описана в products.js)
     const product = getProductById(productId);
 
-    // 3. Если товар не найден, выводим ошибку
+    // Если товар не найден в products.js
     if (!product) {
-        container.innerHTML = `
-            <div class="error-message">
-                <h2>Уход не найден</h2>
-                <p style="margin: 15px 0 30px;">Возможно, этот продукт был временно убран из линейки AURA.</p>
-                <a href="catalog.html" class="btn">Вернуться в каталог</a>
+        zone.innerHTML = `
+            <div style="text-align: center; padding: 60px 0;">
+                <h2>Бьюти-средство не найдено</h2>
+                <p style="color: #888888; margin-top: 10px;">Возможно, этот ритуал ухода еще находится в разработке.</p>
+                <a href="catalog.html" class="btn" style="margin-top: 25px;">Вернуться в каталог</a>
             </div>
         `;
         return;
     }
 
-    // 4. Если продукт найден, рендерим всю страницу
-    container.innerHTML = `
+    // Проверяем, находится ли этот товар в списке желаний
+    const wishlist = AuraStorage.getWishlist();
+    const isFavorite = wishlist.includes(product.id);
+
+    // Меняем заголовок вкладки браузера на название баночки
+    document.title = `${product.name} — AURA`;
+
+    // Отрисовываем роскошный интерфейс карточки
+    zone.innerHTML = `
         <div class="product-view">
             <div class="product-view__gallery">
-                <div class="product-view__image-wrapper">
-                    <img src="${product.image}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/500x500/ffebeb/4a4a4a?text=${encodeURIComponent(product.name)}'">
-                </div>
+                <button class="product-card__wishlist-btn ${isFavorite ? 'active' : ''}" 
+                        style="top: 20px; right: 20px; width: 44px; height: 44px; font-size: 16px;" 
+                        onclick="toggleProductPageWishlist(${product.id}, this)">
+                    <i class="${isFavorite ? 'fas' : 'far'} fa-heart"></i>
+                </button>
+                <img src="${product.image}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/600x600/ffebeb/4a4a4a?text=${encodeURIComponent(product.name)}'">
             </div>
-
-            <div class="product-view__details">
-                <span class="product-view__meta">${product.categoryName} | AURA Skincare</span>
+            
+            <div class="product-view__content">
+                <span class="product-view__brand">${product.brand}</span>
                 <h1 class="product-view__title">${product.name}</h1>
-                <span class="product-view__volume">Объем: ${product.volume}</span>
+                <div class="product-view__price">${product.price} ₽</div>
                 
                 <p class="product-view__description">${product.description}</p>
-
-                <div class="product-view__price-block">
-                    <span class="product-view__price">${product.price} ₽</span>
-                    <button class="btn" onclick="addToCart(${product.id})">
-                        <i class="fas fa-shopping-bag" style="margin-right: 10px;"></i> Добавить в ритуал
-                    </button>
+                
+                <div class="product-view__specs">
+                    <div class="spec-row">
+                        <span class="spec-label">Категория:</span>
+                        <span class="spec-value">${product.categoryName}</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-label">Объем:</span>
+                        <span class="spec-value">${product.volume}</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-label">Тип кожи:</span>
+                        <span class="spec-value">${product.skinTypeName}</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-label">Главный актив:</span>
+                        <span class="spec-value">${product.componentName}</span>
+                    </div>
                 </div>
-
-                <div class="info-tabs">
-                    <div style="margin-bottom: 15px;">
-                        <h4 class="info-tabs__title"><i class="fas fa-feather-alt" style="color: #f3a3a3; margin-right: 5px;"></i> Способ применения</h4>
-                        <p class="info-tabs__text">Нанесите небольшое количество средства на очищенную кожу мягкими похлопывающими движениями до полного впитывания. Используйте утром и вечером.</p>
-                    </div>
-                    <div>
-                        <h4 class="info-tabs__title"><i class="fas fa-leaf" style="color: #f3a3a3; margin-right: 5px;"></i> Философия бренда</h4>
-                        <p class="info-tabs__text">Формулы продуктов AURA разработаны без парабенов и искусственных красителей. Только чистые активы для естественного сияния.</p>
-                    </div>
+                
+                <div class="product-view__actions">
+                    <button class="btn" style="padding: 16px 50px;" onclick="addToCart(${product.id})">Добавить в ритуал</button>
                 </div>
             </div>
         </div>
     `;
 });
+
+// Кастомный переключатель сердца для страницы карточки товара
+window.toggleProductPageWishlist = function(productId, buttonElement) {
+    if (typeof toggleWishlist === "function") {
+        toggleWishlist(productId, buttonElement);
+    }
+};
