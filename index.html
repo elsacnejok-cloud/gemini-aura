@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AURA — Эстетика твоего ухода</title>
+    <title>AURA — Эстетика твоего ухода | Аналог Hollyshop</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -15,21 +15,45 @@
             
             <nav class="navigation">
                 <ul class="nav-list">
-                    <li><a href="catalog.html" class="nav-link">Каталог</a></li>
-                    <li><a href="catalog.html?category=toner" class="nav-link">Тоники</a></li>
-                    <li><a href="catalog.html?category=serum" class="nav-link">Сыворотки</a></li>
-                    <li><a href="catalog.html?category=mask" class="nav-link">Маски</a></li>
+                    <li class="nav-item">
+                        <a href="catalog.html" class="nav-link">Каталог <i class="fas fa-chevron-down" style="font-size: 10px; margin-left: 3px;"></i></a>
+                        <div class="dropdown-menu">
+                            <div class="dropdown-col">
+                                <h4>По категориям</h4>
+                                <a href="catalog.html?category=toner">Тоники для лица</a>
+                                <a href="catalog.html?category=serum">Активные сыворотки</a>
+                                <a href="catalog.html?category=mask">Маски для ритуала</a>
+                                <a href="catalog.html?category=cleansing">Глубокое очищение</a>
+                                <a href="catalog.html?category=cream">Увлажняющие кремы</a>
+                            </div>
+                            <div class="dropdown-col">
+                                <h4>По компонентам</h4>
+                                <a href="catalog.html?component=centella">Центелла азиатская</a>
+                                <a href="catalog.html?component=vit-c">Витамин C</a>
+                                <a href="catalog.html?component=acids">AHA/BHA Кислоты</a>
+                                <a href="catalog.html?component=ceramides">Керамиды</a>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="nav-item"><a href="catalog.html?skinType=dry" class="nav-link">Для сухой кожи</a></li>
+                    <li class="nav-item"><a href="catalog.html?skinType=oily" class="nav-link">Для жирной кожи</a></li>
                 </ul>
             </nav>
 
             <div class="header__actions">
                 <div class="search-box">
-                    <input type="text" placeholder="Поиск ухода..." id="search-input">
-                    <button type="button"><i class="fas fa-search"></i></button>
+                    <input type="text" placeholder="Поиск ухода AURA..." id="search-input">
+                    <button type="button" id="search-btn"><i class="fas fa-search"></i></button>
                 </div>
-                <a href="cart.html" class="cart-icon">
+                
+                <a href="wishlist.html" class="action-icon" title="Избранное">
+                    <i class="far fa-heart"></i>
+                    <span class="badge" id="wishlist-count">0</span>
+                </a>
+
+                <a href="cart.html" class="action-icon" title="Корзина">
                     <i class="fas fa-shopping-bag"></i>
-                    <span id="cart-count">0</span>
+                    <span class="badge" id="cart-count">0</span>
                 </a>
             </div>
         </div>
@@ -38,18 +62,18 @@
     <section class="hero">
         <div class="hero__content">
             <h1 class="hero__title">Истинная аура твоей кожи</h1>
-            <p class="hero__subtitle">Минималистичный уход, вдохновленный самой природой. Подарите себе моменты осознанной заботы.</p>
-            <a href="catalog.html" class="btn">Перейти в каталог</a>
+            <p class="hero__subtitle">Минималистичный премиум-уход, созданный для вашей личной бьюти-рутины. Попробуйте формулы с чистыми активами.</p>
+            <a href="catalog.html" class="btn">Открыть каталог</a>
         </div>
     </section>
 
     <section class="products-section container">
-        <h2 class="section-title">Новинки ухода</h2>
+        <h2 class="section-title">Новинки бренда</h2>
         <div class="products-grid" id="new-products-container">
             </div>
     </section>
 
-    <section class="products-section container bg-light">
+    <section class="bg-light">
         <div class="container">
             <h2 class="section-title">Хиты продаж</h2>
             <div class="products-grid" id="popular-products-container">
@@ -61,25 +85,28 @@
         <div class="container footer__container">
             <div class="footer__block">
                 <h3 class="footer__logo">AURA</h3>
-                <p>Концептуальный магазин косметики для личного ритуала красоты.</p>
+                <p>Эстетический концепт-стор уходовой косметики для домашнего спа-ритуала.</p>
             </div>
             <div class="footer__block">
-                <h4>Навигация</h4>
+                <h4>Каталог ухода</h4>
                 <ul>
-                    <li><a href="catalog.html">Все товары</a></li>
-                    <li><a href="cart.html">Корзина</a></li>
+                    <li><a href="catalog.html">Все средства</a></li>
+                    <li><a href="catalog.html?category=serum">Сыворотки</a></li>
+                    <li><a href="catalog.html?category=toner">Тоники</a></li>
                 </ul>
             </div>
             <div class="footer__block">
-                <h4>Контакты</h4>
-                <p>Email: hello@aura-skincare.ru</p>
-                <p>Проект разработан для личного тестирования.</p>
+                <h4>Для клиента</h4>
+                <p>Проект разработан в целях тестирования интерфейса без бэкенда.</p>
+                <p style="margin-top: 10px; color: #f3a3a3;">Год реализации: 2026</p>
             </div>
         </div>
         <div class="footer__bottom">
-            <p>&copy; 2026 AURA Skincare. Все права защищены (Фиктивный интернет-магазин).</p>
+            <p>&copy; 2026 AURA Skincare. Точный аналог интерфейса Hollyshop.</p>
         </div>
     </footer>
+
+    <div class="toast-container" id="toast-container"></div>
 
     <script src="products.js"></script>
     <script src="main.js"></script>
