@@ -3,144 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ваша корзина — AURA</title>
+    <title>Ваш ритуал ухода (Корзина) — AURA</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
     <style>
-        .cart-page {
-            padding: 60px 0;
-        }
-        .cart-title {
-            font-size: 26px;
-            font-weight: 300;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 40px;
-            border-bottom: 1px solid #e0e0e0;
-            padding-bottom: 15px;
-        }
-        .cart-layout {
-            display: flex;
-            gap: 40px;
-            align-items: flex-start;
-        }
-        .cart-items {
-            flex: 2;
-            background: #ffffff;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.01);
-        }
-        .cart-item {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            padding: 20px 0;
-            border-bottom: 1px solid #f0f0f0;
-        }
-        .cart-item:last-child {
-            border-bottom: none;
-        }
-        .cart-item__image {
-            width: 90px;
-            height: 90px;
-            background: #fafafa;
-            border-radius: 6px;
-            overflow: hidden;
-            flex-shrink: 0;
-        }
-        .cart-item__image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        .cart-item__info {
-            flex-grow: 1;
-        }
-        .cart-item__name {
-            font-size: 16px;
-            font-weight: 500;
-            color: #2c2c2c;
-            margin-bottom: 5px;
-        }
-        .cart-item__category {
-            font-size: 12px;
-            color: #a0a0a0;
-            text-transform: uppercase;
-        }
-        .cart-item__quantity {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            background: #f5f5f5;
-            padding: 5px 12px;
-            border-radius: 20px;
-        }
-        .cart-item__qbtn {
-            border: none;
-            background: none;
-            cursor: pointer;
-            font-size: 14px;
-            color: #4a4a4a;
-            padding: 0 5px;
-        }
-        .cart-item__qbtn:hover {
-            color: #f3a3a3;
-        }
-        .cart-item__price {
-            font-size: 16px;
-            font-weight: 600;
-            color: #2c2c2c;
-            min-width: 80px;
-            text-align: right;
-        }
-        .cart-item__remove {
-            border: none;
-            background: none;
-            color: #c0c0c0;
-            cursor: pointer;
-            font-size: 16px;
-            transition: color 0.2s;
-        }
-        .cart-item__remove:hover {
-            color: #f3a3a3;
-        }
-        /* Боковая панель оформления */
-        .cart-summary {
-            flex: 1;
-            background: #ffffff;
-            border-radius: 8px;
-            padding: 30px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.01);
-            position: sticky;
-            top: 110px;
-        }
-        .summary-title {
-            font-size: 18px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 20px;
-            color: #2c2c2c;
-        }
-        .summary-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 15px;
-            font-size: 14px;
-            color: #6a6a6a;
-        }
-        .summary-row.total {
-            border-top: 1px solid #f0f0f0;
-            padding-top: 15px;
-            font-size: 18px;
-            font-weight: 600;
-            color: #2c2c2c;
-            margin-top: 20px;
-        }
-        .empty-cart-message {
-            text-align: center;
-            padding: 60px 20px;
-        }
+        .cart-page { padding: 60px 0; min-height: 60vh; }
+        .cart-title { font-size: 26px; font-weight: 300; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 40px; border-bottom: 1px solid #e0e0e0; padding-bottom: 15px; }
+        .cart-layout { display: flex; gap: 40px; align-items: flex-start; }
+        .cart-items-block { flex: 2; }
+        .cart-sidebar { flex: 1; background: #ffffff; border-radius: 8px; padding: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.01); border: 1px solid #f8f6f5; position: sticky; top: 120px; }
+        
+        /* Элемент корзины */
+        .cart-item { display: flex; align-items: center; background: #ffffff; padding: 20px; border-radius: 8px; margin-bottom: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.01); border: 1px solid #fcfcfc; }
+        .cart-item__img { width: 90px; height: 90px; object-fit: cover; border-radius: 4px; margin-right: 25px; background: #fafafa; }
+        .cart-item__info { flex-grow: 1; }
+        .cart-item__meta { font-size: 11px; color: #999999; text-transform: uppercase; letter-spacing: 0.5px; }
+        .cart-item__name { font-size: 16px; font-weight: 500; color: #222222; margin: 4px 0; }
+        
+        /* Управление количеством */
+        .quantity-control { display: flex; align-items: center; border: 1px solid #e5e5e5; border-radius: 4px; overflow: hidden; width: fit-content; margin-right: 35px; }
+        .quantity-btn { background: none; border: none; width: 32px; height: 32px; cursor: pointer; font-size: 14px; color: #555555; transition: background 0.2s; }
+        .quantity-btn:hover { background: #fff0f0; color: #f3a3a3; }
+        .quantity-num { width: 35px; text-align: center; font-size: 14px; font-weight: 600; }
+        
+        .cart-item__price { font-size: 18px; font-weight: 700; color: #1a1a1a; min-width: 90px; text-align: right; margin-right: 25px; }
+        .cart-item__delete { background: none; border: none; color: #cccccc; cursor: pointer; font-size: 18px; transition: color 0.2s; }
+        .cart-item__delete:hover { color: #f3a3a3; }
+        
+        .empty-cart { text-align: center; padding: 80px 20px; }
     </style>
 </head>
 <body>
@@ -150,55 +40,75 @@
             <a href="index.html" class="logo">AURA</a>
             <nav class="navigation">
                 <ul class="nav-list">
-                    <li><a href="catalog.html" class="nav-link">Каталог</a></li>
-                    <li><a href="catalog.html?category=toner" class="nav-link">Тоники</a></li>
-                    <li><a href="catalog.html?category=serum" class="nav-link">Сыворотки</a></li>
-                    <li><a href="catalog.html?category=mask" class="nav-link">Маски</a></li>
+                    <li class="nav-item">
+                        <a href="catalog.html" class="nav-link">Каталог <i class="fas fa-chevron-down" style="font-size: 10px; margin-left: 3px;"></i></a>
+                        <div class="dropdown-menu">
+                            <div class="dropdown-col">
+                                <h4>По категориям</h4>
+                                <a href="catalog.html?category=toner">Тоники для лица</a>
+                                <a href="catalog.html?category=serum">Активные сыворотки</a>
+                                <a href="catalog.html?category=mask">Маски для ритуала</a>
+                                <a href="catalog.html?category=cleansing">Глубокое очищение</a>
+                                <a href="catalog.html?category=cream">Увлажняющие кремы</a>
+                            </div>
+                            <div class="dropdown-col">
+                                <h4>По компонентам</h4>
+                                <a href="catalog.html?component=centella">Центелла азиатская</a>
+                                <a href="catalog.html?component=vit-c">Витамин C</a>
+                                <a href="catalog.html?component=acids">AHA/BHA Кислоты</a>
+                                <a href="catalog.html?component=ceramides">Керамиды</a>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="nav-item"><a href="catalog.html?skinType=dry" class="nav-link">Для сухой кожи</a></li>
+                    <li class="nav-item"><a href="catalog.html?skinType=oily" class="nav-link">Для жирной кожи</a></li>
                 </ul>
             </nav>
             <div class="header__actions">
                 <div class="search-box">
-                    <input type="text" placeholder="Поиск ухода..." id="search-input">
-                    <button type="button"><i class="fas fa-search"></i></button>
+                    <input type="text" placeholder="Поиск ухода AURA..." id="search-input">
+                    <button type="button" id="search-btn"><i class="fas fa-search"></i></button>
                 </div>
-                <a href="cart.html" class="cart-icon">
-                    <i class="fas fa-shopping-bag"></i>
-                    <span id="cart-count">0</span>
+                <a href="wishlist.html" class="action-icon" title="Избранное">
+                    <i class="far fa-heart"></i>
+                    <span class="badge" id="wishlist-count">0</span>
+                </a>
+                <a href="cart.html" class="action-icon" title="Корзина">
+                    <i class="fas fa-shopping-bag" style="color: #f3a3a3;"></i>
+                    <span class="badge" id="cart-count">0</span>
                 </a>
             </div>
         </div>
     </header>
 
     <main class="container cart-page">
-        <h1 class="cart-title">Ваш ритуал ухода (Корзина)</h1>
+        <h1 class="cart-title">Ваш выбор ухода</h1>
         
-        <div id="cart-content-wrapper">
-            </div>
+        <div class="cart-layout" id="cart-layout-zone">
+            <div class="cart-items-block" id="cart-items-container"></div>
+
+            <aside class="cart-sidebar" id="cart-summary-sidebar">
+                <h3 style="font-size: 14px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px; font-weight: 700;">Итог заказа</h3>
+                <div id="cart-summary-info">
+                    </div>
+                <a href="checkout.html" class="btn" style="display: block; width: 100%; margin-top: 25px;">Перейти к оформлению</a>
+            </aside>
+        </div>
     </main>
 
     <footer class="footer">
         <div class="container footer__container">
             <div class="footer__block">
                 <h3 class="footer__logo">AURA</h3>
-                <p>Концептуальный магазин косметики для личного ритуала красоты.</p>
-            </div>
-            <div class="footer__block">
-                <h4>Навигация</h4>
-                <ul>
-                    <li><a href="catalog.html">Все товары</a></li>
-                    <li><a href="cart.html">Корзина</a></li>
-                </ul>
-            </div>
-            <div class="footer__block">
-                <h4>Контакты</h4>
-                <p>Email: hello@aura-skincare.ru</p>
-                <p>Проект разработан для личного тестирования.</p>
+                <p>Эстетический концепт-стор уходовой косметики для домашнего спа-ритуала.</p>
             </div>
         </div>
         <div class="footer__bottom">
-            <p>&copy; 2026 AURA Skincare. Все права защищены (Фиктивный интернет-магазин).</p>
+            <p>&copy; 2026 AURA Skincare. Точный аналог интерфейса Hollyshop.</p>
         </div>
     </footer>
+
+    <div class="toast-container" id="toast-container"></div>
 
     <script src="products.js"></script>
     <script src="main.js"></script>
