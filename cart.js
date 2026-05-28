@@ -3,115 +3,120 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function renderCart() {
-    const wrapper = document.getElementById("cart-content-wrapper");
-    if (!wrapper) return;
+    const container = document.getElementById("cart-items-container");
+    const layoutZone = document.getElementById("cart-layout-zone");
+    const summaryInfo = document.getElementById("cart-summary-info");
 
-    // Получаем список товаров из LocalStorage
-    let cart = JSON.parse(localStorage.getItem("aura_cart")) || [];
+    if (!container) return;
 
-    // Если корзина пуста, выводим красивую заглушку
+    const cart = AuraStorage.getCart();
+
+    // Если корзина пуста, убираем сайдбар и выводим эстетичную бьюти-заглушку
     if (cart.length === 0) {
-        wrapper.innerHTML = `
-            <div class="empty-cart-message">
-                <i class="fas fa-shopping-bag" style="font-size: 48px; color: #e0e0e0; margin-bottom: 20px;"></i>
-                <h2 style="font-weight: 300; margin-bottom: 15px;">Ваша корзина пуста</h2>
-                <p style="color: #8a8a8a; margin-bottom: 30px;">Вы еще не добавили ни одного средства в свой ежедневный уход.</p>
-                <a href="catalog.html" class="btn">Заполнить корзину</a>
+        layoutZone.style.display = "block";
+        container.innerHTML = `
+            <div class="empty-cart">
+                <i class="fas fa-shopping-bag" style="font-size: 50px; color: #fbebeb; margin-bottom: 20px;"></i>
+                <h2 style="font-weight: 300; margin-bottom: 12px;">Ваша сумочка ухода пуста</h2>
+                <p style="color: #888888; margin-bottom: 30px;">Вы еще не выбрали ни одного бьюти-ритуала от AURA.</p>
+                <a href="catalog.html" class="btn">Заглянуть в каталог</a>
             </div>
         `;
+        const sidebar = document.getElementById("cart-summary-sidebar");
+        if (sidebar) sidebar.style.display = "none";
         return;
     }
 
-    // Собираем разметку корзины: левая часть (список) + правая часть (итог)
-    let cartItemsHtml = "";
+    // Возвращаем стандартное двухколоночное расположение
+    layoutZone.style.display = "flex";
+    const sidebar = document.getElementById("cart-summary-sidebar");
+    if (sidebar) sidebar.style.display = "block";
+
+    container.innerHTML = "";
     let totalPrice = 0;
+    let totalCount = 0;
 
-    cart.forEach(cartItem => {
-        // Находим полную информацию о продукте из products.js по ID
-        const product = products.find(p => p.id === cartItem.id);
-        
+    // Рендерим товары
+    cart.forEach(item => {
+        const product = getProductById(item.id);
+
         if (product) {
-            const itemSum = product.price * cartItem.quantity;
-            totalPrice += itemSum;
+            const itemTotal = product.price * item.quantity;
+            totalPrice += itemTotal;
+            totalCount += item.quantity;
 
-            cartItemsHtml += `
+            const itemHtml = `
                 <div class="cart-item">
-                    <div class="cart-item__image">
-                        <img src="${product.image}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/150x150/ffebeb/4a4a4a?text=${encodeURIComponent(product.name)}'">
-                    </div>
+                    <img class="cart-item__img" src="${product.image}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/150x150/ffebeb/4a4a4a?text=${encodeURIComponent(product.name)}'">
                     <div class="cart-item__info">
-                        <h3 class="cart-item__name">${product.name}</h3>
-                        <span class="cart-item__category">${product.categoryName} (${product.volume})</span>
+                        <span class="cart-item__meta">${product.brand} | ${product.volume}</span>
+                        <h3 class="cart-item__name"><a href="product.html?id=${product.id}">${product.name}</a></h3>
+                        <p style="font-size: 13px; color: #888888;">Компонент: ${product.componentName}</p>
                     </div>
-                    <div class="cart-item__quantity">
-                        <button class="cart-item__qbtn" onclick="changeQuantity(${product.id}, -1)">-</button>
-                        <span>${cartItem.quantity}</span>
-                        <button class="cart-item__qbtn" onclick="changeQuantity(${product.id}, 1)">+</button>
+                    
+                    <div class="quantity-control">
+                        <button class="quantity-btn" onclick="changeQuantity(${product.id}, -1)"><i class="fas fa-minus"></i></button>
+                        <span class="quantity-num">${item.quantity}</span>
+                        <button class="quantity-btn" onclick="changeQuantity(${product.id}, 1)"><i class="fas fa-plus"></i></button>
                     </div>
-                    <div class="cart-item__price">${itemSum} ₽</div>
-                    <button class="cart-item__remove" onclick="removeFromCart(${product.id})" title="Удалить">
-                        <i class="fas fa-times"></i>
+
+                    <span class="cart-item__price">${itemTotal} ₽</span>
+                    
+                    <button class="cart-item__delete" onclick="removeFromCart(${product.id})" title="Удалить из корзины">
+                        <i class="far fa-trash-alt"></i>
                     </button>
                 </div>
             `;
+            container.insertAdjacentHTML("beforeend", itemHtml);
         }
     });
 
-    // Формируем общую структуру страницы
-    wrapper.innerHTML = `
-        <div class="cart-layout">
-            <div class="cart-items">
-                ${cartItemsHtml}
+    // Заполняем расчетный листок в сайдбаре
+    if (summaryInfo) {
+        summaryInfo.innerHTML = `
+            <div style="display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; color: #666666;">
+                <span>Выбрано средств</span>
+                <span>${totalCount} шт.</span>
             </div>
-
-            <div class="cart-summary">
-                <h2 class="summary-title">Ваш заказ</h2>
-                <div class="summary-row">
-                    <span>Товары (${cart.reduce((sum, i) => sum + i.quantity, 0)} шт.)</span>
-                    <span>${totalPrice} ₽</span>
-                </div>
-                <div class="summary-row">
-                    <span>Доставка</span>
-                    <span style="color: #f3a3a3; font-weight: 500;">Бесплатно</span>
-                </div>
-                <div class="summary-row total">
-                    <span>Итого:</span>
-                    <span>${totalPrice} ₽</span>
-                </div>
-                <a href="checkout.html" class="btn" style="display: block; text-align: center; margin-top: 25px; width: 100%;">Перейти к оформлению</a>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; color: #666666;">
+                <span>Доставка по России</span>
+                <span style="color: #f3a3a3; font-weight: 600;">Бесплатно</span>
             </div>
-        </div>
-    `;
+            <div style="display: flex; justify-content: space-between; font-size: 16px; font-weight: 700; color: #1a1a1a; border-top: 1px solid #f5f5f5; padding-top: 18px; margin-top: 18px;">
+                <span>Общая стоимость:</span>
+                <span>${totalPrice} ₽</span>
+            </div>
+        `;
+    }
 }
 
-// ФУНКЦИЯ ИЗМЕНЕНИЯ КОЛИЧЕСТВА ТОВАРА (+ / -)
+// Изменение количества (+1 или -1)
 window.changeQuantity = function(productId, direction) {
-    let cart = JSON.parse(localStorage.getItem("aura_cart")) || [];
-    const item = cart.find(i => i.id === productId);
+    let cart = AuraStorage.getCart();
+    const existingProduct = cart.find(item => item.id === productId);
 
-    if (item) {
-        item.quantity += direction;
+    if (existingProduct) {
+        existingProduct.quantity += direction;
         
-        // Если количество стало 0 или меньше, удаляем товар полностью
-        if (item.quantity <= 0) {
-            cart = cart.filter(i => i.id !== productId);
+        // Если опустились до 0 — удаляем вещь
+        if (existingProduct.quantity <= 0) {
+            cart = cart.filter(item => item.id !== productId);
         }
-
-        localStorage.setItem("aura_cart", JSON.stringify(cart));
         
-        // Перерисовываем страницу корзины и обновляем счетчик в шапке
+        AuraStorage.saveCart(cart);
+        // Обновляем шапку из main.js
+        if (typeof updateHeaderCounters === "function") updateHeaderCounters();
+        // Перерисовываем страницу корзины
         renderCart();
-        if (typeof updateCartCount === "function") updateCartCount();
     }
 };
 
-// ФУНКЦИЯ ПОЛНОГО УДАЛЕНИЯ ТОВАРА ИЗ КОРЗИНЫ (Иконка крестика)
+// Полное удаление строчки кнопкой "ведро"
 window.removeFromCart = function(productId) {
-    let cart = JSON.parse(localStorage.getItem("aura_cart")) || [];
-    cart = cart.filter(i => i.id !== productId);
+    let cart = AuraStorage.getCart();
+    cart = cart.filter(item => item.id !== productId);
     
-    localStorage.setItem("aura_cart", JSON.stringify(cart));
-    
+    AuraStorage.saveCart(cart);
+    if (typeof updateHeaderCounters === "function") updateHeaderCounters();
     renderCart();
-    if (typeof updateCartCount === "function") updateCartCount();
 };
