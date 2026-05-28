@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мое Избранное — AURA</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .wishlist-page {
+            padding: 60px 0;
+            min-height: 60vh;
+        }
+        .wishlist-title {
+            font-size: 26px;
+            font-weight: 300;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 40px;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 15px;
+        }
+        .empty-wishlist {
+            text-align: center;
+            padding: 80px 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="container header__container">
+            <a href="index.html" class="logo">AURA</a>
+            <nav class="navigation">
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a href="catalog.html" class="nav-link">Каталог <i class="fas fa-chevron-down" style="font-size: 10px; margin-left: 3px;"></i></a>
+                        <div class="dropdown-menu">
+                            <div class="dropdown-col">
+                                <h4>По категориям</h4>
+                                <a href="catalog.html?category=toner">Тоники для лица</a>
+                                <a href="catalog.html?category=serum">Активные сыворотки</a>
+                                <a href="catalog.html?category=mask">Маски для ритуала</a>
+                                <a href="catalog.html?category=cleansing">Глубокое очищение</a>
+                                <a href="catalog.html?category=cream">Увлажняющие кремы</a>
+                            </div>
+                            <div class="dropdown-col">
+                                <h4>По компонентам</h4>
+                                <a href="catalog.html?component=centella">Центелла азиатская</a>
+                                <a href="catalog.html?component=vit-c">Витамин C</a>
+                                <a href="catalog.html?component=acids">AHA/BHA Кислоты</a>
+                                <a href="catalog.html?component=ceramides">Керамиды</a>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="nav-item"><a href="catalog.html?skinType=dry" class="nav-link">Для сухой кожи</a></li>
+                    <li class="nav-item"><a href="catalog.html?skinType=oily" class="nav-link">Для жирной кожи</a></li>
+                </ul>
+            </nav>
+            <div class="header__actions">
+                <div class="search-box">
+                    <input type="text" placeholder="Поиск ухода AURA..." id="search-input">
+                    <button type="button" id="search-btn"><i class="fas fa-search"></i></button>
+                </div>
+                <a href="wishlist.html" class="action-icon" title="Избранное">
+                    <i class="fas fa-heart" style="color: #f3a3a3;"></i>
+                    <span class="badge" id="wishlist-count">0</span>
+                </a>
+                <a href="cart.html" class="action-icon" title="Корзина">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span class="badge" id="cart-count">0</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container wishlist-page">
+        <h1 class="wishlist-title">Избранные средства</h1>
+        
+        <div class="products-grid" id="wishlist-products-container"></div>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer__container">
+            <div class="footer__block">
+                <h3 class="footer__logo">AURA</h3>
+                <p>Эстетический концепт-стор уходовой косметики для домашнего спа-ритуала.</p>
+            </div>
+        </div>
+        <div class="footer__bottom">
+            <p>&copy; 2026 AURA Skincare. Точный аналог интерфейса Hollyshop.</p>
+        </div>
+    </footer>
+
+    <div class="toast-container" id="toast-container"></div>
+
+    <script src="products.js"></script>
+    <script src="main.js"></script>
+    <script src="wishlist.js"></script>
+</body>
+</html>
