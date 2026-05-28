@@ -3,53 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Каталог ухода — AURA</title>
+    <title>Умный каталог ухода — AURA | Навеяно Hollyshop</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
     <style>
         .catalog-layout {
             display: flex;
             gap: 40px;
-            padding: 50px 0;
+            padding: 60px 0;
         }
-        /* Боковая панель фильтров */
+        /* Сайдбар со множественными фильтрами */
         .sidebar {
-            width: 250px;
+            width: 280px;
             flex-shrink: 0;
         }
-        .filter-section {
+        .filter-group {
             background-color: #ffffff;
-            padding: 25px;
+            padding: 22px;
             border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.01);
-            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.01);
+            margin-bottom: 20px;
+            border: 1px solid #f8f6f5;
         }
-        .filter-title {
-            font-size: 16px;
+        .filter-group__title {
+            font-size: 13px;
             text-transform: uppercase;
             letter-spacing: 1px;
-            font-weight: 600;
-            margin-bottom: 20px;
-            color: #2c2c2c;
-            border-bottom: 1px solid #f0f0f0;
-            padding-bottom: 10px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #1a1a1a;
+            border-bottom: 1px solid #f5f5f5;
+            padding-bottom: 8px;
         }
-        .filter-list li {
-            margin-bottom: 12px;
-        }
-        .filter-link {
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
             font-size: 14px;
-            color: #6a6a6a;
-            display: block;
+            color: #555555;
             cursor: pointer;
-            transition: all 0.2s;
+            margin-bottom: 10px;
+            user-select: none;
+            transition: color 0.2s;
         }
-        .filter-link:hover, .filter-link.active {
+        .checkbox-label:hover {
             color: #f3a3a3;
-            padding-left: 5px;
-            font-weight: 500;
         }
-        /* Основной контент каталога */
+        .checkbox-label input {
+            accent-color: #f3a3a3; /* Окрашивает стандартный чекбокс в пастельно-розовый */
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+        /* Основная зона выдачи */
         .catalog-content {
             flex-grow: 1;
         }
@@ -61,22 +67,41 @@
             background-color: #ffffff;
             padding: 15px 25px;
             border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.01);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.01);
+            border: 1px solid #f8f6f5;
         }
         .catalog-toolbar select {
-            padding: 8px 15px;
-            border: 1px solid #e0e0e0;
+            padding: 10px 15px;
+            border: 1px solid #e5e5e5;
             border-radius: 4px;
             color: #4a4a4a;
             outline: none;
             font-family: inherit;
+            font-size: 14px;
             cursor: pointer;
+            transition: border-color 0.2s;
         }
-        .active-category-title {
-            font-size: 22px;
+        .catalog-toolbar select:focus {
+            border-color: #f3a3a3;
+        }
+        .active-filters-title {
+            font-size: 20px;
             font-weight: 300;
-            letter-spacing: 1px;
             text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .reset-filters-btn {
+            background: none;
+            border: none;
+            color: #999999;
+            font-size: 13px;
+            text-decoration: underline;
+            cursor: pointer;
+            margin-top: 5px;
+            display: inline-block;
+        }
+        .reset-filters-btn:hover {
+            color: #f3a3a3;
         }
     </style>
 </head>
@@ -85,24 +110,44 @@
     <header class="header">
         <div class="container header__container">
             <a href="index.html" class="logo">AURA</a>
-            
             <nav class="navigation">
                 <ul class="nav-list">
-                    <li><a href="catalog.html" class="nav-link">Каталог</a></li>
-                    <li><a href="catalog.html?category=toner" class="nav-link">Тоники</a></li>
-                    <li><a href="catalog.html?category=serum" class="nav-link">Сыворотки</a></li>
-                    <li><a href="catalog.html?category=mask" class="nav-link">Маски</a></li>
+                    <li class="nav-item">
+                        <a href="catalog.html" class="nav-link">Каталог <i class="fas fa-chevron-down" style="font-size: 10px; margin-left: 3px;"></i></a>
+                        <div class="dropdown-menu">
+                            <div class="dropdown-col">
+                                <h4>По категориям</h4>
+                                <a href="catalog.html?category=toner">Тоники для лица</a>
+                                <a href="catalog.html?category=serum">Активные сыворотки</a>
+                                <a href="catalog.html?category=mask">Маски для ритуала</a>
+                                <a href="catalog.html?category=cleansing">Глубокое очищение</a>
+                                <a href="catalog.html?category=cream">Увлажняющие кремы</a>
+                            </div>
+                            <div class="dropdown-col">
+                                <h4>По компонентам</h4>
+                                <a href="catalog.html?component=centella">Центелла азиатская</a>
+                                <a href="catalog.html?component=vit-c">Витамин C</a>
+                                <a href="catalog.html?component=acids">AHA/BHA Кислоты</a>
+                                <a href="catalog.html?component=ceramides">Керамиды</a>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="nav-item"><a href="catalog.html?skinType=dry" class="nav-link">Для сухой кожи</a></li>
+                    <li class="nav-item"><a href="catalog.html?skinType=oily" class="nav-link">Для жирной кожи</a></li>
                 </ul>
             </nav>
-
             <div class="header__actions">
                 <div class="search-box">
-                    <input type="text" placeholder="Поиск ухода..." id="search-input">
-                    <button type="button"><i class="fas fa-search"></i></button>
+                    <input type="text" placeholder="Поиск ухода AURA..." id="search-input">
+                    <button type="button" id="search-btn"><i class="fas fa-search"></i></button>
                 </div>
-                <a href="cart.html" class="cart-icon">
+                <a href="wishlist.html" class="action-icon" title="Избранное">
+                    <i class="far fa-heart"></i>
+                    <span class="badge" id="wishlist-count">0</span>
+                </a>
+                <a href="cart.html" class="action-icon" title="Корзина">
                     <i class="fas fa-shopping-bag"></i>
-                    <span id="cart-count">0</span>
+                    <span class="badge" id="cart-count">0</span>
                 </a>
             </div>
         </div>
@@ -111,34 +156,59 @@
     <main class="container">
         <div class="catalog-layout">
             
-            <aside class="sidebar">
-                <div class="filter-section">
-                    <h3 class="filter-title">Категории</h3>
-                    <ul class="filter-list">
-                        <li><span class="filter-link active" data-category="all">Все средства</span></li>
-                        <li><span class="filter-link" data-category="toner">Тоники</span></li>
-                        <li><span class="filter-link" data-category="serum">Сыворотки</span></li>
-                        <li><span class="filter-link" data-category="mask">Маски</span></li>
-                        <li><span class="filter-link" data-category="cleansing">Очищение</span></li>
-                        <li><span class="filter-link" data-category="cream">Кремы</span></li>
-                    </ul>
+            <aside class="sidebar" id="catalog-sidebar">
+                
+                <div class="filter-group">
+                    <h3 class="filter-group__title">Категория</h3>
+                    <label class="checkbox-label"><input type="checkbox" name="category" value="toner"> Тоники</label>
+                    <label class="checkbox-label"><input type="checkbox" name="category" value="serum"> Сыворотки</label>
+                    <label class="checkbox-label"><input type="checkbox" name="category" value="mask"> Маски</label>
+                    <label class="checkbox-label"><input type="checkbox" name="category" value="cleansing"> Очищение</label>
+                    <label class="checkbox-label"><input type="checkbox" name="category" value="cream"> Кремы</label>
                 </div>
+
+                <div class="filter-group">
+                    <h3 class="filter-group__title">Бренд</h3>
+                    <label class="checkbox-label"><input type="checkbox" name="brand" value="AURA Clean"> AURA Clean</label>
+                    <label class="checkbox-label"><input type="checkbox" name="brand" value="AURA Lab"> AURA Lab</label>
+                    <label class="checkbox-label"><input type="checkbox" name="brand" value="AURA Night"> AURA Night</label>
+                </div>
+
+                <div class="filter-group">
+                    <h3 class="filter-group__title">Компонент</h3>
+                    <label class="checkbox-label"><input type="checkbox" name="component" value="centella"> Центелла</label>
+                    <label class="checkbox-label"><input type="checkbox" name="component" value="vit-c"> Витамин C</label>
+                    <label class="checkbox-label"><input type="checkbox" name="component" value="acids"> AHA/BHA Кислоты</label>
+                    <label class="checkbox-label"><input type="checkbox" name="component" value="ceramides"> Керамиды</label>
+                    <label class="checkbox-label"><input type="checkbox" name="checkbox" value="hyaluronic"> Гиалуроновая к-та</label>
+                </div>
+
+                <div class="filter-group">
+                    <h3 class="filter-group__title">Тип кожи</h3>
+                    <label class="checkbox-label"><input type="checkbox" name="skinType" value="all"> Для всех типов</label>
+                    <label class="checkbox-label"><input type="checkbox" name="skinType" value="dry"> Сухая</label>
+                    <label class="checkbox-label"><input type="checkbox" name="skinType" value="oily"> Жирная / Проблемная</label>
+                    <label class="checkbox-label"><input type="checkbox" name="skinType" value="sensitive"> Чувствительная</label>
+                </div>
+
+                <button class="reset-filters-btn" id="reset-filters">Сбросить все фильтры</button>
             </aside>
 
             <section class="catalog-content">
                 <div class="catalog-toolbar">
-                    <h2 class="active-category-title" id="page-category-title">Все средства</h2>
+                    <div>
+                        <h2 class="active-filters-title" id="catalog-title">Все средства</h2>
+                    </div>
                     <div class="sort-box">
                         <select id="sort-select">
-                            <option value="default">Сортировка по умолчанию</option>
-                            <option value="price-asc">Сначала дешевле</option>
-                            <option value="price-desc">Сначала дороже</option>
+                            <option value="default">По умолчанию</option>
+                            <option value="price-asc">Цена: по возрастанию</option>
+                            <option value="price-desc">Цена: по убыванию</option>
                         </select>
                     </div>
                 </div>
 
-                <div class="products-grid" id="catalog-products-container">
-                    </div>
+                <div class="products-grid" id="catalog-products-container"></div>
             </section>
 
         </div>
@@ -148,25 +218,15 @@
         <div class="container footer__container">
             <div class="footer__block">
                 <h3 class="footer__logo">AURA</h3>
-                <p>Концептуальный магазин косметики для личного ритуала красоты.</p>
-            </div>
-            <div class="footer__block">
-                <h4>Навигация</h4>
-                <ul>
-                    <li><a href="catalog.html">Все товары</a></li>
-                    <li><a href="cart.html">Корзина</a></li>
-                </ul>
-            </div>
-            <div class="footer__block">
-                <h4>Контакты</h4>
-                <p>Email: hello@aura-skincare.ru</p>
-                <p>Проект разработан для личного тестирования.</p>
+                <p>Эстетический концепт-стор уходовой косметики для домашнего спа-ритуала.</p>
             </div>
         </div>
         <div class="footer__bottom">
-            <p>&copy; 2026 AURA Skincare. Все права защищены (Фиктивный интернет-магазин).</p>
+            <p>&copy; 2026 AURA Skincare. Точный аналог интерфейса Hollyshop.</p>
         </div>
     </footer>
+
+    <div class="toast-container" id="toast-container"></div>
 
     <script src="products.js"></script>
     <script src="main.js"></script>
