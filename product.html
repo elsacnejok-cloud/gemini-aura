@@ -3,107 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Детали ухода — AURA</title>
+    <title>Карточка ухода AURA</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
     <style>
-        .product-page {
-            padding: 60px 0;
-        }
-        .product-view {
-            display: flex;
-            gap: 50px;
-            background-color: #ffffff;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.01);
-        }
-        .product-view__gallery {
-            flex: 1;
-            max-width: 500px;
-        }
-        .product-view__image-wrapper {
-            background-color: #fafafa;
-            border-radius: 8px;
-            overflow: hidden;
-            position: relative;
-            padding-bottom: 100%;
-        }
-        .product-view__image-wrapper img {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            object-fit: cover;
-        }
-        .product-view__details {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-        .product-view__meta {
-            font-size: 13px;
-            text-transform: uppercase;
-            color: #a0a0a0;
-            letter-spacing: 1px;
-            margin-bottom: 10px;
-        }
-        .product-view__title {
-            font-size: 32px;
-            font-weight: 300;
-            color: #2c2c2c;
-            line-height: 1.3;
-            margin-bottom: 15px;
-        }
-        .product-view__volume {
-            font-size: 14px;
-            color: #6a6a6a;
-            margin-bottom: 25px;
-            background: #ffebeb;
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-weight: 500;
-            align-self: flex-start;
-        }
-        .product-view__price-block {
-            border-top: 1px solid #f0f0f0;
-            border-bottom: 1px solid #f0f0f0;
-            padding: 20px 0;
-            margin-bottom: 30px;
-            display: flex;
-            align-items: center;
-            gap: 30px;
-        }
-        .product-view__price {
-            font-size: 28px;
-            font-weight: 600;
-            color: #2c2c2c;
-        }
-        .product-view__description {
-            font-size: 15px;
-            color: #555555;
-            line-height: 1.7;
-            margin-bottom: 30px;
-        }
-        .info-tabs {
-            margin-top: auto;
-            border-top: 1px solid #f0f0f0;
-            padding-top: 20px;
-        }
-        .info-tabs__title {
-            font-size: 14px;
-            text-transform: uppercase;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #2c2c2c;
-        }
-        .info-tabs__text {
-            font-size: 13px;
-            color: #7a7a7a;
-        }
-        .error-message {
-            text-align: center;
-            padding: 100px 0;
-        }
+        .product-page { padding: 60px 0; min-height: 70vh; }
+        .product-view { display: flex; gap: 60px; align-items: flex-start; background: #ffffff; padding: 40px; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.01); border: 1px solid #f8f6f5; }
+        .product-view__gallery { flex: 1; position: relative; background: #fafafa; border-radius: 6px; overflow: hidden; }
+        .product-view__gallery img { width: 100%; height: auto; object-fit: cover; }
+        .product-view__content { flex: 1; }
+        .product-view__brand { font-size: 13px; text-transform: uppercase; letter-spacing: 1.5px; color: #999999; margin-bottom: 8px; }
+        .product-view__title { font-size: 28px; font-weight: 300; color: #1a1a1a; margin-bottom: 20px; letter-spacing: 0.5px; }
+        .product-view__price { font-size: 24px; font-weight: 700; color: #2c2c2c; margin-bottom: 30px; }
+        
+        /* Блок характеристик баночки */
+        .product-view__specs { margin-bottom: 30px; border-top: 1px solid #f5f5f5; padding-top: 20px; }
+        .spec-row { display: flex; margin-bottom: 12px; font-size: 14px; }
+        .spec-label { width: 150px; color: #888888; }
+        .spec-value { color: #222222; font-weight: 500; }
+        
+        .product-view__description { font-size: 15px; color: #555555; line-height: 1.7; margin-bottom: 35px; }
+        .product-view__actions { display: flex; gap: 20px; align-items: center; }
     </style>
 </head>
 <body>
@@ -113,51 +33,59 @@
             <a href="index.html" class="logo">AURA</a>
             <nav class="navigation">
                 <ul class="nav-list">
-                    <li><a href="catalog.html" class="nav-link">Каталог</a></li>
-                    <li><a href="catalog.html?category=toner" class="nav-link">Тоники</a></li>
-                    <li><a href="catalog.html?category=serum" class="nav-link">Сыворотки</a></li>
-                    <li><a href="catalog.html?category=mask" class="nav-link">Маски</a></li>
+                    <li class="nav-item">
+                        <a href="catalog.html" class="nav-link">Каталог <i class="fas fa-chevron-down" style="font-size: 10px; margin-left: 3px;"></i></a>
+                        <div class="dropdown-menu">
+                            <div class="dropdown-col">
+                                <h4>По категориям</h4>
+                                <a href="catalog.html?category=toner">Тоники для лица</a>
+                                <a href="catalog.html?category=serum">Активные сыворотки</a>
+                                <a href="catalog.html?category=mask">Маски для ритуала</a>
+                                <a href="catalog.html?category=cleansing">Глубокое очищение</a>
+                                <a href="catalog.html?category=cream">Увлажняющие кремы</a>
+                            </div>
+                            <div class="dropdown-col">
+                                <h4>По компонентам</h4>
+                                <a href="catalog.html?component=centella">Центелла азиатская</a>
+                                <a href="catalog.html?component=vit-c">Витамин C</a>
+                                <a href="catalog.html?component=acids">AHA/BHA Кислоты</a>
+                                <a href="catalog.html?component=ceramides">Керамиды</a>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="nav-item"><a href="catalog.html?skinType=dry" class="nav-link">Для сухой кожи</a></li>
+                    <li class="nav-item"><a href="catalog.html?skinType=oily" class="nav-link">Для жирной кожи</a></li>
                 </ul>
             </nav>
             <div class="header__actions">
                 <div class="search-box">
-                    <input type="text" placeholder="Поиск ухода..." id="search-input">
-                    <button type="button"><i class="fas fa-search"></i></button>
+                    <input type="text" placeholder="Поиск ухода AURA..." id="search-input">
+                    <button type="button" id="search-btn"><i class="fas fa-search"></i></button>
                 </div>
-                <a href="cart.html" class="cart-icon">
-                    <i class="fas fa-shopping-bag"></i>
-                    <span id="cart-count">0</span>
-                </a>
+                <a href="wishlist.html" class="action-icon" title="Избранное"><i class="far fa-heart"></i><span class="badge" id="wishlist-count">0</span></a>
+                <a href="cart.html" class="action-icon" title="Корзина"><i class="fas fa-shopping-bag"></i><span class="badge" id="cart-count">0</span></a>
             </div>
         </div>
     </header>
 
-    <main class="container product-page" id="product-page-container">
-        </main>
+    <main class="container product-page">
+        <div id="product-view-zone">
+            </div>
+    </main>
 
     <footer class="footer">
         <div class="container footer__container">
             <div class="footer__block">
                 <h3 class="footer__logo">AURA</h3>
-                <p>Концептуальный магазин косметики для личного ритуала красоты.</p>
-            </div>
-            <div class="footer__block">
-                <h4>Навигация</h4>
-                <ul>
-                    <li><a href="catalog.html">Все товары</a></li>
-                    <li><a href="cart.html">Корзина</a></li>
-                </ul>
-            </div>
-            <div class="footer__block">
-                <h4>Контакты</h4>
-                <p>Email: hello@aura-skincare.ru</p>
-                <p>Проект разработан для личного тестирования.</p>
+                <p>Эстетический концепт-стор уходовой косметики.</p>
             </div>
         </div>
         <div class="footer__bottom">
-            <p>&copy; 2026 AURA Skincare. Все права защищены (Фиктивный интернет-магазин).</p>
+            <p>&copy; 2026 AURA Skincare. Аналог Hollyshop.</p>
         </div>
     </footer>
+
+    <div class="toast-container" id="toast-container"></div>
 
     <script src="products.js"></script>
     <script src="main.js"></script>
