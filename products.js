@@ -1,131 +1,57 @@
-// Расширенная база данных ухода AURA для точной фильтрации
 const products = [
     {
         id: 1,
-        name: "Soft Touch Toner",
-        category: "toner",
-        categoryName: "Тоники",
-        brand: "AURA Clean",
-        skinType: "sensitive",
-        skinTypeName: "Чувствительная",
-        component: "centella",
-        componentName: "Центелла",
-        price: 1450,
-        description: "Мягкий тонер бережно восстанавливает pH-баланс кожи после очищения, глубоко увлажняет и готовит её к нанесению последующего ухода.",
-        volume: "200 мл",
-        image: "images/toner.jpg",
+        name: "Pure Cleansing Oil",
+        brand: "MANYO FACTORY",
+        category: "cleansing",
+        categoryName: "Очищение",
+        price: 2350,
+        image: "https://hollyshop.ru/upload/resize_cache/iblock/34b/400_400_1/34b2fde5e317e0ef71caefda06a4bc20.jpg", 
         isNew: true,
-        isPopular: false,
-        inStock: true
+        isPopular: true
     },
     {
         id: 2,
-        name: "Vitamin C Glow Serum",
+        name: "Advanced Snail 96 Mucin Power Essence",
+        brand: "COSRX",
         category: "serum",
         categoryName: "Сыворотки",
-        brand: "AURA Lab",
-        skinType: "all",
-        skinTypeName: "Для всех типов",
-        component: "vit-c",
-        componentName: "Витамин C",
-        price: 2100,
-        description: "Антиоксидантная сыворотка возвращает коже естественное сияние, выравнивает тон и борется с пигментацией.",
-        volume: "30 мл",
-        image: "images/serum.jpg",
+        price: 1980,
+        image: "https://hollyshop.ru/upload/resize_cache/iblock/b3b/400_400_1/b3b65ef3dfc8cba099cb6333ea64516a.jpg",
         isNew: false,
-        isPopular: true,
-        inStock: true
+        isPopular: true
     },
     {
         id: 3,
-        name: "Night Recovery Mask",
-        category: "mask",
-        categoryName: "Маски",
-        brand: "AURA Night",
-        skinType: "dry",
-        skinTypeName: "Сухая",
-        component: "ceramides",
-        componentName: "Керамиды",
-        price: 1850,
-        description: "Ночная восстанавливающая маска интенсивно питает кожу во время сна, стирая следы усталости к самому утру.",
-        volume: "50 мл",
-        image: "images/mask.jpg",
+        name: "Heartleaf 77% Soothing Toner",
+        brand: "ANUA",
+        category: "toner",
+        categoryName: "Тоники",
+        price: 2100,
+        image: "https://hollyshop.ru/upload/resize_cache/iblock/ae3/400_400_1/ae30fc832d2dfcc420fc4d38bb1bd0ef.jpeg",
         isNew: true,
-        isPopular: true,
-        inStock: true
+        isPopular: false
     },
     {
         id: 4,
-        name: "Hydrophilic Cleansing Oil",
-        category: "cleansing",
-        categoryName: "Очищение",
-        brand: "AURA Clean",
-        skinType: "oily",
-        skinTypeName: "Жирная и проблемная",
-        component: "acids",
-        componentName: "AHA/BHA Кислоты",
-        price: 1600,
-        description: "Гидрофильное масло мягко растворяет даже самый стойкий макияж и излишки себума, не оставляя жирной пленки.",
-        volume: "150 мл",
-        image: "images/cleansing-oil.jpg",
-        isNew: false,
-        isPopular: false,
-        inStock: true
-    },
-    {
-        id: 5,
-        name: "Moisturizing Fluid Cream",
+        name: "Budge Bio Retinol Cream",
+        brand: "MEDI-PEEL",
         category: "cream",
         categoryName: "Кремы",
-        brand: "AURA Lab",
-        skinType: "dry",
-        skinTypeName: "Сухая",
-        component: "hyaluronic",
-        componentName: "Гиалуроновая кислота",
-        price: 1950,
-        description: "Легкий увлажняющий флюид мгновенно впитывается, насыщая клетки влагой на весь день. Отличная база под макияж.",
-        volume: "50 мл",
-        image: "images/cream.jpg",
+        price: 3100,
+        image: "https://hollyshop.ru/upload/resize_cache/iblock/c34/400_400_1/c342f0a5be7fd187a54bd2de6203cf65.jpg",
         isNew: false,
-        isPopular: true,
-        inStock: true
-    },
-    {
-        id: 6,
-        name: "BHA Matte Essence",
-        category: "serum",
-        categoryName: "Сыворотки",
-        brand: "AURA Lab",
-        skinType: "oily",
-        skinTypeName: "Жирная и проблемная",
-        component: "acids",
-        componentName: "AHA/BHA Кислоты",
-        price: 2250,
-        description: "Матирующая эссенция сужает поры, регулирует выработку себума и предотвращает появление воспалений.",
-        volume: "40 мл",
-        image: "images/essence.jpg",
-        isNew: true,
-        isPopular: false,
-        inStock: true
+        isPopular: true
     }
 ];
 
-// Вспомогательные функции для работы с LocalStorage (Корзина и Избранное)
 const AuraStorage = {
-    getCart() {
-        return JSON.parse(localStorage.getItem("aura_cart")) || [];
-    },
-    saveCart(cart) {
-        localStorage.setItem("aura_cart", JSON.stringify(cart));
-    },
-    getWishlist() {
-        return JSON.parse(localStorage.getItem("aura_wishlist")) || [];
-    },
-    saveWishlist(list) {
-        localStorage.setItem("aura_wishlist", JSON.stringify(list));
-    }
+    getCart() { return JSON.parse(localStorage.getItem("hs_cart")) || []; },
+    saveCart(cart) { localStorage.setItem("hs_cart", JSON.stringify(cart)); },
+    getWishlist() { return JSON.parse(localStorage.getItem("hs_wishlist")) || []; },
+    saveWishlist(list) { localStorage.setItem("hs_wishlist", JSON.stringify(list)); }
 };
 
 function getProductById(id) {
-    return products.find(product => product.id === parseInt(id));
+    return products.find(p => p.id === parseInt(id));
 }
